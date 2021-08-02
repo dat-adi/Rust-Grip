@@ -10,8 +10,6 @@ fn main() {
     // Here, we are utilizing the rand module's function
     let secret_number = rand::thread_rng().gen_range(1..101);
 
-    println!("The secret number is : {}", secret_number);
-
     loop {
         // Taking an input
         println!("Please input your guess.");
@@ -28,11 +26,16 @@ fn main() {
         // We shadow the guess variable
         // and proceed to trim, parse and convert it
         // into a unsigned 32 bit integer
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        let guess: u32 = guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
 
         // Printing the guessed number using a format in the print statement
         println!("You guessed : {}", guess);
 
+        // Here, we use the comparison function in order
+        // to check if the user got the number correct
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
