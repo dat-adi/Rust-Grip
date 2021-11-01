@@ -1,6 +1,27 @@
 // Importing the standard library
 // for env which works with the process
+use exitfailure::ExitFailure;
 use std::env;
+use reqwest::Url;
+
+struct User{
+    username: String,
+    repos: i64
+}
+
+impl User{
+    async fn get(username: &String) -> Result<Self, ExitFailure>{
+        let url = format!(
+            "https://api.github.com/users/{}",
+            username
+        );
+
+        let url = Url::parse(&url);
+        let res = reqwest::get(url).await?.json::<User>().await?;
+
+        Ok(res);
+    }
+}
 
 fn main(){
     // Defining a vector that can take arguments
