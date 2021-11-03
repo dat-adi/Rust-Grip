@@ -2,6 +2,7 @@
 // for env which works with the process
 use serde::{Deserialize, Serialize};
 use std::env;
+use reqwest::header::USER_AGENT;
 
 // Defining a structure with JSON compatibility
 #[derive(Serialize, Deserialize, Debug)]
@@ -34,6 +35,7 @@ impl User{
         let client = reqwest::Client::new();
         let res = client
             .get(url)
+            .header(USER_AGENT, "gh simple cli")
             .send()
             .await
             .unwrap()
