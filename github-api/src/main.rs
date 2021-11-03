@@ -7,8 +7,11 @@ use reqwest::header::USER_AGENT;
 // Defining a structure with JSON compatibility
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User{
+    pub login: String,
     pub name: String,
-    pub public_repos: i64
+    pub bio: String,
+    pub public_repos: i64,
+    pub public_gists: i64
 }
 
 // Defining a endpoint location as a constant
@@ -43,8 +46,7 @@ impl User{
             .await
             .unwrap();
 
-        // TODO there's a fix to be made in here.
-        // Error("expected value")
+        // Unwrapping the values from the Response
         let user: User = serde_json::from_str(&res).unwrap();
 
         Ok(user)
@@ -73,7 +75,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user = User::get(&username).await?;
 
     // Printing the arguments
-    println!("User : {}\tRepositories : {}", user.name, user.public_repos);
+    println!("Login: {}\nName : {}\nBio: {}\nRepositories : {}\nGists: {}", 
+             user.login, user.name, user.bio, user.public_repos, user.public_gists);
 
     Ok(())
 }
